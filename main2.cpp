@@ -126,8 +126,9 @@ int main()
     bool valid = false;
     do {
         cout << "\nto Resizing filter choose num 1\n";
-        cout << "to frame filter choose num 2\n";
+        cout << "to add Frame choose num 2\n";
         cout << "to infrared filter choose num 3\n";
+        cout << "to infrared filter choose num 4\n";
         cout << "Enter choice: ";
         cin >> x;
 
@@ -141,6 +142,10 @@ int main()
         } 
         else if (x == 3) {
             infraredFilter(img);
+            valid = true;
+        } 
+        else if (x == 4) {
+            Blur(img);
             valid = true;
         } 
         else {
