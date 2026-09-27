@@ -112,27 +112,143 @@ void Blur(Image& img)
     }
     img = newImg;
 }
+void grayscale (Image& img)
+{
+    for(int i = 0 ; i<img.width;i++){
+        for(int j =0 ; j<img.height;j++){
+            int average = 0;
+            for(int k= 0 ; k<3 ;k++){
+                average+= img(i,j,k);
+            }
+            average/=3;
+            img(i,j,0)=average;
+            img(i,j,1)=average;
+            img(i,j,2)=average;
+        }
+    }
+}
+void rotate (Image& img,string filename,string newname)
+{
+    int w = img.width;
+    int h = img.height;
+    cout << "Loaded image: " << w << " x " << h << endl;
+
+    int rotatedegree;
+    cout<<"enter the clockwise degree to rotate the image: ";
+    cin>>rotatedegree;
+
+    if(rotatedegree == 90){
+        Image rotated(h, w);
+        for(int y = 0; y < w; y++)
+            for(int x = 0; x < h; x++)
+                for(int c = 0; c < 3; c++)
+                    rotated.setPixel(x, y, c, img.getPixel(y, h-1-x, c));
+        img = rotated;
+    }
+    else if(rotatedegree == 180){
+        Image rotated(w, h);
+        for(int y = 0; y < h; y++)
+            for(int x = 0; x < w; x++)
+                for(int c = 0; c < 3; c++)
+                    rotated.setPixel(x, y, c, img.getPixel(w-1-x, h-1-y, c));
+        img = rotated;
+    }
+    else if(rotatedegree == 270){
+        Image rotated(h, w);
+        for(int y = 0; y < w; y++)
+            for(int x = 0; x < h; x++)
+                for(int c = 0; c < 3; c++)
+                    rotated.setPixel(x, y, c, img.getPixel(w-1-y, x, c));
+        img = rotated;
+    }
+    else{
+        cout<<"only 90, 180, or 270 supported"<<endl;
+    }
+}
+void edge_detection(Image& img)
+{
+    int w = img.width;
+    int h = img.height;
+    Image edges(w, h);
+
+    for(int y = 0; y < h; y++){
+        for(int x = 0; x < w; x++){
+
+            if(x == w-1){
+                edges.setPixel(x, y, 0, 255);
+                edges.setPixel(x, y, 1, 255);
+                edges.setPixel(x, y, 2, 255);
+                continue;
+            }
+            int here = (img.getPixel(x, y, 0) + img.getPixel(x, y, 1) + img.getPixel(x, y, 2)) / 3;
+
+            int right = (img.getPixel(x+1, y, 0) + img.getPixel(x+1, y, 1) + img.getPixel(x+1, y, 2)) / 3;
+
+            int difference = here - right;
+            if(difference < 0) difference = -difference;
+
+            int value = 255 - difference;
+
+            edges.setPixel(x, y, 0, value);
+            edges.setPixel(x, y, 1, value);
+            edges.setPixel(x, y, 2, value);
+        }
+    }
+    img=edges;
+}
+void TV (Image& img)
+{
+    int w = img.width;
+    int h = img.height;
+    Image tv(w, h);
+
+    for(int y = 0; y < h; y++){
+        for(int x = 0; x < w; x++){
+            for(int c = 0; c < 3; c++){
+
+                int value = img.getPixel(x, y, c);
+
+                if(y % 2 == 0){
+                    value = value / 2;
+                }
+
+                tv.setPixel(x, y, c, value);
+            }
+        }
+    }
+    img=tv;
+}
+
 int main()
 {
     string nameimg, newname;
     Image img;
     
-    cout << "write your name img : ";
+    cout << "write your name img with extension .jpg, .bmp, .png, .tga : ";
     cin >> nameimg;
-    cout << "\nwrite your new output image name : ";
+    cout << "\nwrite your new output image name with extension .jpg, .bmp, .png, .tga:  : ";
     cin >> newname;
     img.loadNewImage(nameimg);
     int x;
     bool valid = false;
     do {
-        cout << "\nto Resizing filter choose num 1\n";
-        cout << "to add Frame choose num 2\n";
-        cout << "to infrared filter choose num 3\n";
-        cout << "to infrared filter choose num 4\n";
+        cout << "\nTo Resizing filter choose num 1\n";
+        cout << "To Add Frame choose num 2\n";
+        cout << "To Infrared filter choose num 3\n";
+        cout << "To Blur filter choose num 4\n";
+        cout << "To Grayscale filter choose num 5\n";
+        cout << "To Rotate filter choose num 6\n";
+        cout << "To Edge detection filter choose num 7\n";
+        cout << "To TV filter choose num 8\n";
+        cout << "To Exit choose num 0\n";
         cout << "Enter choice: ";
         cin >> x;
 
-        if (x == 1) {
+        if (x == 0) {
+            cout << "Exiting program. Goodbye!\n";
+            return 0;
+        }
+        else if (x == 1) {
             Resizing(img);
             valid = true;
         } 
@@ -146,6 +262,22 @@ int main()
         } 
         else if (x == 4) {
             Blur(img);
+            valid = true;
+        } 
+        else if (x == 5) {
+            grayscale(img);
+            valid = true;
+        } 
+        else if (x == 6) {
+            rotate(img,nameimg,newname);
+            valid = true;
+        } 
+        else if (x == 7) {
+            edge_detection(img);
+            valid = true;
+        } 
+        else if (x == 8) {
+            TV(img);
             valid = true;
         } 
         else {
