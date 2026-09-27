@@ -78,7 +78,40 @@ void infraredFilter(Image& img)
         }
     }
 }
-
+void Blur(Image& img)
+{
+    int radius;
+    cout << "Enter blur level ( 5 for normal, 10-15 for heavy blur ): ";
+    cin >> radius;
+    Image newImg(img.width, img.height);
+    for (int i = 0; i < img.width; i++)
+    {
+        for (int j = 0; j < img.height; j++)
+        {
+            int sumR = 0, sumG = 0, sumB = 0;
+            int count = 0;
+            for (int dx = -radius; dx <= radius; dx++)
+            {
+                for (int dy = -radius; dy <= radius; dy++)
+                {
+                    int ni = i + dx;
+                    int nj = j + dy;
+                    if (ni >= 0 && ni < img.width && nj >= 0 && nj < img.height)
+                    {
+                        sumR += img(ni, nj, 0);
+                        sumG += img(ni, nj, 1);
+                        sumB += img(ni, nj, 2);
+                        count++;
+                    }
+                }
+            }
+            newImg(i, j, 0) = sumR / count;
+            newImg(i, j, 1) = sumG / count;
+            newImg(i, j, 2) = sumB / count;
+        }
+    }
+    img = newImg;
+}
 int main()
 {
     string nameimg, newname;
