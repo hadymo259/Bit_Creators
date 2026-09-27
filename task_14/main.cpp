@@ -18,7 +18,6 @@ int main(){
 
                 int value = img.getPixel(x, y, c);
 
-                // scan lines: darken every other row like an old TV screen
                 if(y % 2 == 0){
                     value = value / 2;
                 }
