@@ -1,3 +1,36 @@
+/*
+ FCAI – CS213: OOP Programming – Assignment 1
+ Team Name: Bit Creators
+ Section: 25 - 26
+ 
+ Team Members & Assigned Filters:
+ ---------------------------------------------
+ 1. Adam | ID: 20250076
+    - Filter 01: Grayscale Conversion
+    - Filter 05: Flip Image
+    - Filter 09: Merge Images
+    - Filter 13: Sunlight Filter
+
+ 2. Malak | ID: 20250658
+    - Filter 02: Black and White
+    - Filter 06: Rotate Image
+    - Filter 10: Detect Image Edges
+    - Filter 14: Old TV Filter
+
+ 3. Nariman | ID: 20250697
+    - Filter 03: Invert Image
+    - Filter 07: Darken and Lighten Image
+    - Filter 11: Crop Images
+    - Filter 15: Purple Filter
+
+ 4. Hady | ID: 20251467
+    - Filter 04: Adding a Frame to the Picture
+    - Filter 08: Resizing Images
+    - Filter 12: Blur Images
+    - Filter 16: Infrared Filter
+    - Made the menu,load,save and exit fun
+ ----------------------------------------------
+*/
 #include <iostream>
 #include "Image_Class.h"
 
