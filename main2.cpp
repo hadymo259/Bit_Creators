@@ -251,6 +251,49 @@ void TV (Image& img)
     }
     img=tv;
 }
+//  فلتر 3 بيعكس ألوان الصورة
+void invertImage(Image& image) {
+    for (int row = 0; row < image.height; row++) {
+        for (int col = 0; col < image.width; col++) {
+            for (int color = 0; color < 3; color++) {
+                int currentPixel = image.getPixel(col, row, color);
+                int invertedPixel = 255 - currentPixel;
+                image.setPixel(col, row, color, invertedPixel);
+            }
+        }
+    }
+}
+
+// فلتر 7 بيفتح ويغمق الصورة هعمله على معادلتين
+void lightenImage(Image& image) {
+    for (int row = 0; row < image.height; row++) {
+        for (int col = 0; col < image.width; col++) {
+            for (int color = 0; color < 3; color++) {
+                int currentPixel = image.getPixel(col, row, color);
+                int newPixel = currentPixel + 50; 
+
+                if (newPixel > 255) newPixel = 255; 
+
+                image.setPixel(col, row, color, newPixel);
+            }
+        }
+    }
+}
+
+void darkenImage(Image& image) {
+    for (int row = 0; row < image.height; row++) {
+        for (int col = 0; col < image.width; col++) {
+            for (int color = 0; color < 3; color++) {
+                int currentPixel = image.getPixel(col, row, color);
+                int newPixel = currentPixel - 50; 
+
+                if (newPixel < 0) newPixel = 0; 
+
+                image.setPixel(col, row, color, newPixel);
+            }
+        }
+    }
+}
 
 int main()
 {
@@ -273,6 +316,9 @@ int main()
         cout << "To Rotate filter choose num 6\n";
         cout << "To Edge detection filter choose num 7\n";
         cout << "To TV filter choose num 8\n";
+        cout << "To Invert filter choose num 9\n";
+        cout << "To Lighten filter choose num 10\n";
+        cout << "To Darken filter choose num 11\n";
         cout << "To Exit choose num 0\n";
         cout << "Enter choice: ";
         cin >> x;
@@ -313,6 +359,18 @@ int main()
             TV(img);
             valid = true;
         } 
+        else if (x == 9){
+            invert(img);
+            valid = true;
+        }
+        else if (x ==10){
+            lighten(img);
+            valid = true;
+        }
+        else if (x == 11){
+            darken(img);
+            valid = true;
+        }
         else {
             cout << "\nInvalid choice! Please try again.\n";
         }
