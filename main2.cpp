@@ -251,7 +251,6 @@ void TV (Image& img)
     }
     img=tv;
 }
-//  فلتر 3 بيعكس ألوان الصورة
 void invertImage(Image& image) {
     for (int row = 0; row < image.height; row++) {
         for (int col = 0; col < image.width; col++) {
@@ -263,8 +262,6 @@ void invertImage(Image& image) {
         }
     }
 }
-
-// فلتر 7 بيفتح ويغمق الصورة هعمله على معادلتين
 void lightenImage(Image& image) {
     for (int row = 0; row < image.height; row++) {
         for (int col = 0; col < image.width; col++) {
@@ -360,15 +357,15 @@ int main()
             valid = true;
         } 
         else if (x == 9){
-            invert(img);
+            invertImage(img);
             valid = true;
         }
         else if (x ==10){
-            lighten(img);
+            lightenImage(img);
             valid = true;
         }
         else if (x == 11){
-            darken(img);
+            darkenImage(img);
             valid = true;
         }
         else {
