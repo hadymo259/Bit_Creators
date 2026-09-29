@@ -1,7 +1,7 @@
 /*
  FCAI – CS213: OOP Programming – Assignment 1
  Team Name: Bit Creators
- Section: 25 - 26
+ Section: 29 - 30
  
  Team Members & Assigned Filters:
  ---------------------------------------------
@@ -263,7 +263,14 @@ void invertImage(Image& image) {
     }
 }
 void lightenImage(Image& image) {
-    for (int row = 0; row < image.height; row++) {
+    int ch;
+    cout<<"\nTo lighten image choose num 1\n";
+    cout<<"To Darken image choose num 2\n";
+    cout<<"Enter your choose : ";
+    cin>>ch;
+    if(ch==1)
+    {
+        for (int row = 0; row < image.height; row++) {
         for (int col = 0; col < image.width; col++) {
             for (int color = 0; color < 3; color++) {
                 int currentPixel = image.getPixel(col, row, color);
@@ -274,19 +281,88 @@ void lightenImage(Image& image) {
                 image.setPixel(col, row, color, newPixel);
             }
         }
-    }
-}
-
-void darkenImage(Image& image) {
-    for (int row = 0; row < image.height; row++) {
+        }
+    }else if(ch==2)
+    {
+        for (int row = 0; row < image.height; row++) {
         for (int col = 0; col < image.width; col++) {
             for (int color = 0; color < 3; color++) {
                 int currentPixel = image.getPixel(col, row, color);
-                int newPixel = currentPixel - 50; 
+                int newPixel = currentPixel - 50;
 
                 if (newPixel < 0) newPixel = 0; 
 
                 image.setPixel(col, row, color, newPixel);
+            }
+        }
+        }
+    
+    }
+    
+}
+void blackandwhite(Image& img)
+{
+    for(int i=0;i<img.width;i++)
+    {
+        for(int j=0;j<img.height;j++)
+        {
+            int avg=0;
+            for(int k=0;k<3;k++)
+            {
+                avg+=img(i,j,k);
+            }
+            avg/=3;
+            if(avg>127)
+            {
+                img(i,j,0)=255;
+                img(i,j,1)=255;
+                img(i,j,2)=255;
+            }else{
+                img(i,j,0)=0;
+                img(i,j,1)=0;
+                img(i,j,2)=0;
+            }
+        }
+    }
+}
+void flip(Image& img)
+{
+    int choice;
+    cout << "1. Horizontal Flip\n";
+    cout << "2. Vertical Flip\n";
+    cout << "Choose: ";
+
+    if (!(cin >> choice) || (choice != 1 && choice != 2))
+    {
+        cin.clear();
+        cin.ignore(10000, '\n');
+        cout << "Invalid choice.\n";
+        return;
+    }
+
+    if (choice == 1)
+    {
+        for (int i = 0; i < img.width / 2; i++)
+        {
+            for (int j = 0; j < img.height; j++)
+            {
+                for (int k = 0; k < 3; k++)
+                {
+                    swap(img(i, j, k), img(img.width - 1 - i, j, k));
+                }
+            }
+        }
+    }
+    else if (choice == 2)
+    {
+        for (int i = 0; i < img.width; i++)
+        {
+            for (int j = 0; j < img.height / 2; j++)
+            {
+                for (int k = 0; k < 3; k++)
+                {
+                    swap(img(i, j, k), img(i, img.height - 1 - j, k));
+                }
             }
         }
     }
@@ -314,8 +390,9 @@ int main()
         cout << "To Edge detection filter choose num 7\n";
         cout << "To TV filter choose num 8\n";
         cout << "To Invert filter choose num 9\n";
-        cout << "To Lighten filter choose num 10\n";
-        cout << "To Darken filter choose num 11\n";
+        cout << "To Lighten and Darkenfilter choose num 10\n";
+        cout << "To Black and White filter choose num 11\n";
+        cout << "To Flip Image filter choose num 12\n";
         cout << "To Exit choose num 0\n";
         cout << "Enter choice: ";
         cin >> x;
@@ -364,8 +441,12 @@ int main()
             lightenImage(img);
             valid = true;
         }
-        else if (x == 11){
-            darkenImage(img);
+        else if (x ==11){
+            blackandwhite(img);
+            valid = true;
+        }
+        else if (x ==12){
+            flip(img);
             valid = true;
         }
         else {
