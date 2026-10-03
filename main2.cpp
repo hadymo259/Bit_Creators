@@ -28,6 +28,7 @@
     - Filter 08: Resizing Images
     - Filter 12: Blur Images
     - Filter 16: Infrared Filter
+    - Filter 18: Oil painting Filter(Bonus)
     - Made the menu,load,save and exit fun
  ----------------------------------------------
 */
@@ -367,6 +368,94 @@ void flip(Image& img)
         }
     }
 }
+void oilPainting(Image& img)
+{
+    int radius;
+    
+    do
+    {
+        cout << "\nEnter oil painting level ";
+        cout << "(2-3 for normal, 4-6 for strong, 7-10 for very strong): ";
+        cin >> radius;
+
+        if (radius < 2 || radius > 10)
+        {
+            cout << "Invalid level! Please enter a number from 2 to 10.\n";
+        }
+
+    } while (radius < 2 || radius > 10);
+
+    int width = img.width;
+    int height = img.height;
+
+    Image newimg(width, height);
+
+    for (int i = 0; i < width; i++)
+    {
+        for (int j = 0; j < height; j++)
+        {
+            int count[256] = {0};
+
+            int sumR[256] = {0};
+            int sumG[256] = {0};
+            int sumB[256] = {0};
+
+            for (int dx = -radius; dx <= radius; dx++)
+            {
+                for (int dy = -radius; dy <= radius; dy++)
+                {
+                    int x = i + dx;
+                    int y = j + dy;
+
+                    if (x < 0)
+                        x = 0;
+
+                    if (x >= width)
+                        x = width - 1;
+
+                    if (y < 0)
+                        y = 0;
+
+                    if (y >= height)
+                        y = height - 1;
+
+                    int r = img(x, y, 0);
+                    int g = img(x, y, 1);
+                    int b = img(x, y, 2);
+
+                    int intensity = (r + g + b) / 3;
+
+                    count[intensity]++;
+
+                    sumR[intensity] += r;
+                    sumG[intensity] += g;
+                    sumB[intensity] += b;
+                }
+            }
+
+            int maxIntensity = 0;
+
+            for (int k = 1; k < 256; k++)
+            {
+                if (count[k] > count[maxIntensity])
+                {
+                    maxIntensity = k;
+                }
+            }
+
+            newimg(i, j, 0) =
+                sumR[maxIntensity] / count[maxIntensity];
+
+            newimg(i, j, 1) =
+                sumG[maxIntensity] / count[maxIntensity];
+
+            newimg(i, j, 2) =
+                sumB[maxIntensity] / count[maxIntensity];
+        }
+    }
+
+    img = newimg;
+}
 
 int main()
 {
@@ -393,6 +482,7 @@ int main()
         cout << "To Lighten and Darkenfilter choose num 10\n";
         cout << "To Black and White filter choose num 11\n";
         cout << "To Flip Image filter choose num 12\n";
+        cout << "To Oil painting filter choose num 13\n";
         cout << "To Exit choose num 0\n";
         cout << "Enter choice: ";
         cin >> x;
@@ -447,6 +537,10 @@ int main()
         }
         else if (x ==12){
             flip(img);
+            valid = true;
+        }
+        else if (x ==13){
+            oilPainting(img);
             valid = true;
         }
         else {
