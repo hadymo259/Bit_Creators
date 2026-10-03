@@ -28,11 +28,13 @@
     - Filter 08: Resizing Images
     - Filter 12: Blur Images
     - Filter 16: Infrared Filter
+    - Filter 17: Skew Filter(Bonus)
     - Filter 18: Oil painting Filter(Bonus)
     - Made the menu,load,save and exit fun
  ----------------------------------------------
 */
 #include <iostream>
+#include <cmath>
 #include "Image_Class.h"
 
 using namespace std;
@@ -456,6 +458,41 @@ void oilPainting(Image& img)
 
     img = newimg;
 }
+void skew(Image& img)
+{
+    double angle;
+
+    cout << "\nEnter skew angle in degrees: ";
+    cin >> angle;
+
+    int width = img.width;
+    int height = img.height;
+
+    double radians = angle * 3.14159265 / 180.0;
+
+    int shift = (int)((height - 1) * tan(radians));
+
+    int newWidth = width + abs(shift);
+
+    Image newimg(newWidth, height);
+
+    for (int i = 0; i < width; i++)
+    {
+        for (int j = 0; j < height; j++)
+        {
+            int newX = i - (int)(j * tan(radians)) + shift;
+
+            if (newX >= 0 && newX < newWidth)
+            {
+                newimg(newX, j, 0) = img(i, j, 0);
+                newimg(newX, j, 1) = img(i, j, 1);
+                newimg(newX, j, 2) = img(i, j, 2);
+            }
+        }
+    }
+
+    img = newimg;
+}
 
 int main()
 {
@@ -483,6 +520,7 @@ int main()
         cout << "To Black and White filter choose num 11\n";
         cout << "To Flip Image filter choose num 12\n";
         cout << "To Oil painting filter choose num 13\n";
+        cout << "To Skew filter choose num 14\n";
         cout << "To Exit choose num 0\n";
         cout << "Enter choice: ";
         cin >> x;
@@ -541,6 +579,10 @@ int main()
         }
         else if (x ==13){
             oilPainting(img);
+            valid = true;
+        }
+        else if (x ==14){
+            skew(img);
             valid = true;
         }
         else {
