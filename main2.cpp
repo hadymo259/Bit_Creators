@@ -1,4 +1,4 @@
-/*
+    +/*
  FCAI – CS213: OOP Programming – Assignment 1
  Team Name: Bit Creators
  Section: 29 - 30
@@ -493,6 +493,55 @@ void skew(Image& img)
 
     img = newimg;
 }
+#include <iostream>
+#include "Image_Class.h"
+
+using namespace std;
+
+
+void cropImage(Image& image) {
+    int x, y, w, h;
+    cout << "Enter x, y, width, height: ";
+    cin >> x >> y >> w >> h;
+
+
+    if (x < 0 || y < 0 || x + w > image.width || y + h > image.height) {
+        cout << "Error: Out of bounds!\n";
+        return;
+    }
+
+    Image output(w, h);
+
+    for (int row = 0; row < h; row++) {
+        for (int col = 0; col < w; col++) {
+            for (int c = 0; c < 3; c++) {
+                int p = image.getPixel(y + row, x + col, c);
+                output.setPixel(row, col, c, p);
+            }
+        }
+    }
+
+    image = output;
+    cout << "Done! Image cropped successfully.\n";
+}
+
+
+void purpleFilter(Image& image) {
+    for (int row = 0; row < image.height; row++) {
+        for (int col = 0; col < image.width; col++) {
+
+            int r = image.getPixel(col, row, 0) + 40;
+            int b = image.getPixel(col, row, 2) + 40;
+
+            if (r > 255) r = 255;
+            if (b > 255) b = 255;
+
+            image.setPixel(col, row, 0, r);
+            image.setPixel(col, row, 2, b);
+        }
+    }
+    cout << "Done! Purple filter applied successfully.\n";
+}
 
 int main()
 {
@@ -521,6 +570,8 @@ int main()
         cout << "To Flip Image filter choose num 12\n";
         cout << "To Oil painting filter choose num 13\n";
         cout << "To Skew filter choose num 14\n";
+        cout << "To Crop Image choose num 15\n";
+        cout << "To Purple Image choose num 16\n";
         cout << "To Exit choose num 0\n";
         cout << "Enter choice: ";
         cin >> x;
@@ -583,6 +634,14 @@ int main()
         }
         else if (x ==14){
             skew(img);
+            valid = true;
+        }
+        else if (x == 15) {
+            cropImage(img);
+            valid = true;
+        }
+        else if (x == 16) {
+            purpleFilter(img);
             valid = true;
         }
         else {
