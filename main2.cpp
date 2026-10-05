@@ -1,4 +1,4 @@
-    +/*
+/*
  FCAI – CS213: OOP Programming – Assignment 1
  Team Name: Bit Creators
  Section: 29 - 30
@@ -493,13 +493,8 @@ void skew(Image& img)
 
     img = newimg;
 }
-#include <iostream>
-#include "Image_Class.h"
-
-using namespace std;
-
-
-void cropImage(Image& image) {
+void cropImage(Image& image) 
+{
     int x, y, w, h;
     cout << "Enter x, y, width, height: ";
     cin >> x >> y >> w >> h;
@@ -515,18 +510,15 @@ void cropImage(Image& image) {
     for (int row = 0; row < h; row++) {
         for (int col = 0; col < w; col++) {
             for (int c = 0; c < 3; c++) {
-                int p = image.getPixel(y + row, x + col, c);
-                output.setPixel(row, col, c, p);
+                output(col, row, c) = image(x + col, y + row, c);
             }
         }
     }
 
     image = output;
-    cout << "Done! Image cropped successfully.\n";
 }
-
-
-void purpleFilter(Image& image) {
+void purpleFilter(Image& image) 
+{
     for (int row = 0; row < image.height; row++) {
         for (int col = 0; col < image.width; col++) {
 
@@ -540,7 +532,6 @@ void purpleFilter(Image& image) {
             image.setPixel(col, row, 2, b);
         }
     }
-    cout << "Done! Purple filter applied successfully.\n";
 }
 
 int main()
