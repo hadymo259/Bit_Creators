@@ -163,7 +163,7 @@ void grayscale (Image& img)
         }
     }
 }
-void rotate (Image& img,string filename,string newname)
+void rotate (Image& img)
 {
     int w = img.width;
     int h = img.height;
@@ -534,115 +534,208 @@ void purpleFilter(Image& image)
     }
 }
 
+bool validExtension(string name)
+{
+    int pos = name.find_last_of('.');
+
+    if (pos == -1)
+        return false;
+
+    string ext = name.substr(pos);
+
+    if (ext == ".jpg" ||
+        ext == ".jpeg" ||
+        ext == ".png" ||
+        ext == ".bmp" ||
+        ext == ".tga")
+    {
+        return true;
+    }
+
+    return false;
+}
+
+bool loadImage(Image& image, string& imageName)
+{
+    string name;
+
+    while (true)
+    {
+        cout << "\nEnter image name with extension .jpg, .bmp, .png, .tga : ";
+        cin >> name;
+
+        if (!validExtension(name))
+        {
+            cout << "Invalid extension! Try again.\n";
+            continue;
+        }
+
+        image.loadNewImage(name);
+        imageName = name;
+
+        cout << "Image loaded successfully!\n\n";
+
+        return true;
+    }
+}
+bool saveImage(Image& image, string& imageName)
+{
+    int choice;
+
+    cout << "\n1. Save with same name\n";
+    cout << "2. Save with new name\n";
+    cout << "Enter choice: ";
+    cin >> choice;
+
+    if (choice == 1)
+    {
+        if (image.saveImage(imageName))
+        {
+            cout << "Image saved successfully!\n\n";
+            return true;
+        }
+
+        cout << "Failed to save image!\n";
+        return false;
+    }
+
+    else if (choice == 2)
+    {
+        string name;
+
+        while (true)
+        {
+            cout << "\nEnter new image name with extension .jpg, .bmp, .png, .tga : ";
+            cin >> name;
+
+            if (!validExtension(name))
+            {
+                cout << "Invalid extension! Try again.\n";
+                continue;
+            }
+
+            if (image.saveImage(name))
+            {
+                imageName = name;
+
+                cout << "Image saved successfully!\n";
+                return true;
+            }
+
+            cout << "Failed to save image!\n";
+            return false;
+        }
+    }
+
+    else
+    {
+        cout << "Invalid choice!\n";
+        return false;
+    }
+}
+void showMenu()
+{
+    cout << "==== Choose a Filter ====\n";
+    cout << "1. Grayscale Filter\n";
+    cout << "2. Black and White Filter\n";
+    cout << "3. Invert Filter\n";
+    cout << "4. Add Frame Filter\n";
+    cout << "5. Flip Filter\n";
+    cout << "6. Rotate Filter\n";
+    cout << "7. Lighten / Darken Filter\n";
+    cout << "8. Resize Filter\n";
+    cout << "10. Edge Detection Filter\n";
+    cout << "11. Crop Image Filter\n";
+    cout << "12. Blur Filter\n";
+    cout << "14. TV Filter\n";
+    cout << "15. Purple Image Filter\n";
+    cout << "16. Infrared Filter\n";
+    cout << "17. Skew Filter\n";
+    cout << "18. Oil Painting Filter\n";
+    cout << "19. Save Image\n";
+    cout << "20. Load New Image\n";
+    cout << "0. Exit\n";
+
+    cout << "====================================\n";
+}
+
 int main()
 {
-    string nameimg, newname;
-    Image img;
-    
-    cout << "write your name img with extension .jpg, .bmp, .png, .tga : ";
-    cin >> nameimg;
-    cout << "\nwrite your new output image name with extension .jpg, .bmp, .png, .tga:  : ";
-    cin >> newname;
-    img.loadNewImage(nameimg);
-    int x;
-    bool valid = false;
-    do {
-        cout << "\nTo Resizing filter choose num 1\n";
-        cout << "To Add Frame choose num 2\n";
-        cout << "To Infrared filter choose num 3\n";
-        cout << "To Blur filter choose num 4\n";
-        cout << "To Grayscale filter choose num 5\n";
-        cout << "To Rotate filter choose num 6\n";
-        cout << "To Edge detection filter choose num 7\n";
-        cout << "To TV filter choose num 8\n";
-        cout << "To Invert filter choose num 9\n";
-        cout << "To Lighten and Darkenfilter choose num 10\n";
-        cout << "To Black and White filter choose num 11\n";
-        cout << "To Flip Image filter choose num 12\n";
-        cout << "To Oil painting filter choose num 13\n";
-        cout << "To Skew filter choose num 14\n";
-        cout << "To Crop Image choose num 15\n";
-        cout << "To Purple Image choose num 16\n";
-        cout << "To Exit choose num 0\n";
-        cout << "Enter choice: ";
-        cin >> x;
+    Image image;
+    string imageName;
 
-        if (x == 0) {
-            cout << "Exiting program. Goodbye!\n";
-            return 0;
+    bool loaded = false;
+
+    while (!loaded)
+    {
+        loaded = loadImage(image, imageName);
+
+        if (!loaded)
+        {
+            cout << "Please try again.\n";
         }
-        else if (x == 1) {
-            Resizing(img);
-            valid = true;
-        } 
-        else if (x == 2) {
-            frame(img);
-            valid = true;
-        } 
-        else if (x == 3) {
-            infraredFilter(img);
-            valid = true;
-        } 
-        else if (x == 4) {
-            Blur(img);
-            valid = true;
-        } 
-        else if (x == 5) {
-            grayscale(img);
-            valid = true;
-        } 
-        else if (x == 6) {
-            rotate(img,nameimg,newname);
-            valid = true;
-        } 
-        else if (x == 7) {
-            edge_detection(img);
-            valid = true;
-        } 
-        else if (x == 8) {
-            TV(img);
-            valid = true;
-        } 
-        else if (x == 9){
-            invertImage(img);
-            valid = true;
+    }
+
+    while (true)
+    {
+        showMenu();
+
+        int choice;
+
+        cout << "Enter choice: ";
+        cin >> choice;
+
+        if (choice == 0)
+        {
+            char answer;
+
+            cout << "\nDo you want to save before exit? (y/n): ";
+            cin >> answer;
+
+            if (answer == 'y' || answer == 'Y')
+            {
+                saveImage(image, imageName);
+            }
+
+            cout << "\nGoodbye!\n";
+            break;
         }
-        else if (x ==10){
-            lightenImage(img);
-            valid = true;
+
+        else if (choice == 1){grayscale(image);}
+        else if (choice == 2){blackandwhite(image);}
+        else if (choice == 3){invertImage(image);}
+        else if (choice == 4){frame(image);}
+        else if (choice == 5){flip(image);}
+        else if (choice == 6){rotate(image);}
+        else if (choice == 7){lightenImage(image);}
+        else if (choice == 8){Resizing(image);}
+        else if (choice == 10){edge_detection(image);}
+        else if (choice == 11){cropImage(image);}
+        else if (choice == 12){Blur(image);}
+        else if (choice == 14){TV(image);}
+        else if (choice == 15){purpleFilter(image);}
+        else if (choice == 16){infraredFilter(image);}
+        else if (choice == 17){skew(image);}
+        else if (choice == 18){oilPainting(image);}
+        else if (choice == 19){saveImage(image, imageName);}
+        else if (choice == 20)
+        {
+            char answer;
+
+            cout << "\nDo you want to save the current image before loading a new one? (y/n): ";
+            cin >> answer;
+
+            if (answer == 'y' || answer == 'Y')
+            {
+                saveImage(image, imageName);
+            }
+
+            loadImage(image, imageName);
         }
-        else if (x ==11){
-            blackandwhite(img);
-            valid = true;
-        }
-        else if (x ==12){
-            flip(img);
-            valid = true;
-        }
-        else if (x ==13){
-            oilPainting(img);
-            valid = true;
-        }
-        else if (x ==14){
-            skew(img);
-            valid = true;
-        }
-        else if (x == 15) {
-            cropImage(img);
-            valid = true;
-        }
-        else if (x == 16) {
-            purpleFilter(img);
-            valid = true;
-        }
-        else {
+        else
+        {
             cout << "\nInvalid choice! Please try again.\n";
         }
-    } while (!valid);
-
-    if(img.saveImage(newname))
-    {
-        cout << "\nDone! Image saved successfully.\n";
     }
     return 0;
 }
