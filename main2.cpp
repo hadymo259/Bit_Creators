@@ -47,8 +47,12 @@ void frame(Image& img)
     if (ch == 1) { r = 255; g = 0;   b = 0;   }
     else if (ch == 2) { r = 0;   g = 255; b = 0;   }
     else if (ch == 3) { r = 0;   g = 0;   b = 255; }
-    cout << "write the thinkness you want : ";
-    cin >> thinkness;
+    do
+    {
+        cout << "Write the thickness you want: ";
+        cin >> thinkness;
+    }
+    while (thinkness <= 0);
     int newwidth = img.width + (2 * thinkness);
     int newheight = img.height + (2 * thinkness);
     Image newimg(newwidth, newheight);
@@ -76,10 +80,14 @@ void frame(Image& img)
 void Resizing(Image& img)
 {
     int newwidth,newhight;
-    cout<<"write new width for image : ";
-    cin>>newwidth;
-    cout<<"write new hight for image : ";
-    cin>>newhight;
+    do
+    {
+        cout << "Write new width for image: ";
+        cin >> newwidth;
+        cout << "Write new height for image: ";
+        cin >> newhight;
+    }
+    while (newwidth <= 0 || newhight <= 0);
     float x= (float)img.width / newwidth;
     float y= (float)img.height / newhight;
     Image newimg(newwidth,newhight);
@@ -117,8 +125,12 @@ void infraredFilter(Image& img)
 void Blur(Image& img)
 {
     int radius;
-    cout << "Enter blur level ( 5 for normal, 10-15 for heavy blur ): ";
-    cin >> radius;
+    do
+    {
+        cout << "Enter blur level (5 for normal, 10-15 for heavy blur): ";
+        cin >> radius;
+    }
+    while (radius < 1 || radius > 15);
     Image newImg(img.width, img.height);
     for (int i = 0; i < img.width; i++)
     {
@@ -533,7 +545,99 @@ void purpleFilter(Image& image)
         }
     }
 }
+void mergeImages(Image& img)
+{
+    string filename;
+    cout << "Enter second image filename: ";
+    cin >> filename;
 
+    Image img2;
+    try
+    {
+        if (!img2.loadNewImage(filename)) {
+            cout << "Could not load image.\n";
+            return;
+        }
+    }
+    catch (...)
+    {
+        cout << "Could not load image.\n";
+        return;
+    }
+
+    int choice;
+    cout << "1. Resize both to the biggest size\n";
+    cout << "2. Merge the common area only\n";
+    cout << "Choose: ";
+
+    if (!(cin >> choice) || (choice != 1 && choice != 2))
+    {
+        cin.clear();
+        cin.ignore(10000, '\n');
+        cout << "Invalid choice.\n";
+        return;
+    }
+
+    if (choice == 1)
+    {
+        int W = max(img.width, img2.width);
+        int H = max(img.height, img2.height);
+
+        Image result(W, H);
+
+        for (int i = 0; i < W; i++)
+        {
+            for (int j = 0; j < H; j++)
+            {
+                int x1 = (1LL * i * img.width) / W;
+                int y1 = (1LL * j * img.height) / H;
+                int x2 = (1LL * i * img2.width) / W;
+                int y2 = (1LL * j * img2.height) / H;
+
+                for (int k = 0; k < 3; k++)
+                {
+                    result(i, j, k) = (img(x1, y1, k) + img2(x2, y2, k)) / 2;
+                }
+            }
+        }
+        img = result;
+    }
+    else
+    {
+        int W = min(img.width, img2.width);
+        int H = min(img.height, img2.height);
+
+        Image result(W, H);
+
+        for (int i = 0; i < W; i++)
+        {
+            for (int j = 0; j < H; j++)
+            {
+                for (int k = 0; k < 3; k++)
+                {
+                    result(i, j, k) = (img(i, j, k) + img2(i, j, k)) / 2;
+                }
+            }
+        }
+        img = result;
+    }
+}
+void sunlight(Image& img)
+{
+    for (int i = 0; i < img.width; i++)
+    {
+        for (int j = 0; j < img.height; j++)
+        {
+            int r = img(i, j, 0) * 1.2;
+            int g = img(i, j, 1) * 1.1;
+            int b = img(i, j, 2) * 0.9;
+
+            img(i, j, 0) = min(255, r);
+            img(i, j, 1) = min(255, g);
+            img(i, j, 2) = min(255, b);
+        }
+    }
+}
 bool validExtension(string name)
 {
     int pos = name.find_last_of('.');
@@ -572,9 +676,6 @@ bool loadImage(Image& image, string& imageName)
 
         image.loadNewImage(name);
         imageName = name;
-
-        cout << "Image loaded successfully!\n\n";
-
         return true;
     }
 }
@@ -644,9 +745,11 @@ void showMenu()
     cout << "6. Rotate Filter\n";
     cout << "7. Lighten / Darken Filter\n";
     cout << "8. Resize Filter\n";
+    cout << "9. Merge Images Filter\n";
     cout << "10. Edge Detection Filter\n";
     cout << "11. Crop Image Filter\n";
     cout << "12. Blur Filter\n";
+    cout << "13. Sunlight Filter\n";
     cout << "14. TV Filter\n";
     cout << "15. Purple Image Filter\n";
     cout << "16. Infrared Filter\n";
@@ -750,6 +853,11 @@ int main()
             oldImage = image;
             Resizing(image);
         }
+        else if (choice == 9)
+        {
+            oldImage = image;
+            mergeImages(image);
+        }
         else if (choice == 10)
         {
             oldImage = image;
@@ -764,6 +872,11 @@ int main()
         {
             oldImage = image;
             Blur(image);
+        }
+        else if (choice == 13)
+        {
+            oldImage = image;
+            sunlight(image);
         }
         else if (choice == 14)
         {
@@ -808,6 +921,7 @@ int main()
 
             loadImage(image, imageName);
             originalImage = image;
+            oldImage = image;
         }
         else if(choice == 21)
         {
