@@ -654,14 +654,25 @@ void showMenu()
     cout << "18. Oil Painting Filter\n";
     cout << "19. Save Image\n";
     cout << "20. Load New Image\n";
+    cout << "21. Undo last Filter\n";
+    cout << "22. Clear all Filters\n";
     cout << "0. Exit\n";
-
+    
     cout << "====================================\n";
+}
+void clear(Image& image, Image& originalImage)
+{
+    image = originalImage;
+
+    cout << "\nAll filters have been cleared!\n";
 }
 
 int main()
 {
     Image image;
+    Image originalImage;
+    Image oldImage;
+ 
     string imageName;
 
     bool loaded = false;
@@ -669,13 +680,12 @@ int main()
     while (!loaded)
     {
         loaded = loadImage(image, imageName);
-
         if (!loaded)
         {
             cout << "Please try again.\n";
         }
     }
-
+    originalImage = image;
     while (true)
     {
         showMenu();
@@ -700,24 +710,90 @@ int main()
             cout << "\nGoodbye!\n";
             break;
         }
-
-        else if (choice == 1){grayscale(image);}
-        else if (choice == 2){blackandwhite(image);}
-        else if (choice == 3){invertImage(image);}
-        else if (choice == 4){frame(image);}
-        else if (choice == 5){flip(image);}
-        else if (choice == 6){rotate(image);}
-        else if (choice == 7){lightenImage(image);}
-        else if (choice == 8){Resizing(image);}
-        else if (choice == 10){edge_detection(image);}
-        else if (choice == 11){cropImage(image);}
-        else if (choice == 12){Blur(image);}
-        else if (choice == 14){TV(image);}
-        else if (choice == 15){purpleFilter(image);}
-        else if (choice == 16){infraredFilter(image);}
-        else if (choice == 17){skew(image);}
-        else if (choice == 18){oilPainting(image);}
-        else if (choice == 19){saveImage(image, imageName);}
+        else if (choice == 1)
+        {
+            oldImage = image;
+            grayscale(image);
+        }
+        else if (choice == 2)
+        {
+            oldImage = image;
+            blackandwhite(image);
+        }
+        else if (choice == 3)
+        {
+            oldImage = image;
+            invertImage(image);
+        }
+        else if (choice == 4)
+        {
+            oldImage = image;
+            frame(image);
+        }
+        else if (choice == 5)
+        {
+            oldImage = image;
+            flip(image);
+        }
+        else if (choice == 6)
+        {
+            oldImage = image;
+            rotate(image);
+        }
+        else if (choice == 7)
+        {
+            oldImage = image;
+            lightenImage(image);
+        }
+        else if (choice == 8)
+        {
+            oldImage = image;
+            Resizing(image);
+        }
+        else if (choice == 10)
+        {
+            oldImage = image;
+            edge_detection(image);
+        }
+        else if (choice == 11)
+        {
+            oldImage = image;
+            cropImage(image);
+        }
+        else if (choice == 12)
+        {
+            oldImage = image;
+            Blur(image);
+        }
+        else if (choice == 14)
+        {
+            oldImage = image;
+            TV(image);
+        }
+        else if (choice == 15)
+        {
+            oldImage = image;
+            purpleFilter(image);
+        }
+        else if (choice == 16)
+        {
+            oldImage = image;
+            infraredFilter(image);
+        }
+        else if (choice == 17)
+        {
+            oldImage = image;
+            skew(image);
+        }
+        else if (choice == 18)
+        {
+            oldImage = image;
+            oilPainting(image);
+        }
+        else if (choice == 19)
+        {
+            saveImage(image, imageName);
+        }
         else if (choice == 20)
         {
             char answer;
@@ -731,6 +807,16 @@ int main()
             }
 
             loadImage(image, imageName);
+            originalImage = image;
+        }
+        else if(choice == 21)
+        {
+            image = oldImage;
+            cout << "Undo done successfully!\n";
+        }
+        else if(choice == 22)
+        {
+            clear(image, originalImage);
         }
         else
         {
