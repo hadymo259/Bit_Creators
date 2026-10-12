@@ -40,58 +40,6 @@
 
 using namespace std;
 
-void frame(Image &img)
-{
-    int r = 0, g = 0, b = 0, ch, thinkness;
-    cout << "Choose color (1. Red | 2. Green | 3. Blue): ";
-    cin >> ch;
-    if (ch == 1)
-    {
-        r = 255;
-        g = 0;
-        b = 0;
-    }
-    else if (ch == 2)
-    {
-        r = 0;
-        g = 255;
-        b = 0;
-    }
-    else if (ch == 3)
-    {
-        r = 0;
-        g = 0;
-        b = 255;
-    }
-    do
-    {
-        cout << "Write the thickness you want: ";
-        cin >> thinkness;
-    } while (thinkness <= 0);
-    int newwidth = img.width + (2 * thinkness);
-    int newheight = img.height + (2 * thinkness);
-    Image newimg(newwidth, newheight);
-    for (int i = 0; i < newwidth; i++)
-    {
-        for (int j = 0; j < newheight; j++)
-        {
-            newimg(i, j, 0) = r;
-            newimg(i, j, 1) = g;
-            newimg(i, j, 2) = b;
-        }
-    }
-    for (int i = 0; i < img.width; i++)
-    {
-        for (int j = 0; j < img.height; j++)
-        {
-            for (int k = 0; k < 3; k++)
-            {
-                newimg(i + thinkness, j + thinkness, k) = img(i, j, k);
-            }
-        }
-    }
-    img = newimg;
-}
 void Resizing(Image &img)
 {
     int newwidth, newhight;
@@ -190,6 +138,58 @@ void grayscale(Image &img)
             img(i, j, 2) = average;
         }
     }
+}
+void frame(Image &img)
+{
+    int r = 0, g = 0, b = 0, ch, thinkness;
+    cout << "Choose color (1. Red | 2. Green | 3. Blue): ";
+    cin >> ch;
+    if (ch == 1)
+    {
+        r = 255;
+        g = 0;
+        b = 0;
+    }
+    else if (ch == 2)
+    {
+        r = 0;
+        g = 255;
+        b = 0;
+    }
+    else if (ch == 3)
+    {
+        r = 0;
+        g = 0;
+        b = 255;
+    }
+    do
+    {
+        cout << "Write the thickness you want: ";
+        cin >> thinkness;
+    } while (thinkness <= 0);
+    int newwidth = img.width + (2 * thinkness);
+    int newheight = img.height + (2 * thinkness);
+    Image newimg(newwidth, newheight);
+    for (int i = 0; i < newwidth; i++)
+    {
+        for (int j = 0; j < newheight; j++)
+        {
+            newimg(i, j, 0) = r;
+            newimg(i, j, 1) = g;
+            newimg(i, j, 2) = b;
+        }
+    }
+    for (int i = 0; i < img.width; i++)
+    {
+        for (int j = 0; j < img.height; j++)
+        {
+            for (int k = 0; k < 3; k++)
+            {
+                newimg(i + thinkness, j + thinkness, k) = img(i, j, k);
+            }
+        }
+    }
+    img = newimg;
 }
 void rotate(Image &img)
 {
