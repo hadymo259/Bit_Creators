@@ -10,13 +10,13 @@
     - Filter 09: Merge Images
     - Filter 13: Sunlight Filter
 
- 2. Malak | ID: 20250658 | S13:S14
+ 2. Malak | ID: 20250658 | S11:S12
     - Filter 02: Black and White
     - Filter 06: Rotate Image
     - Filter 10: Detect Image Edges
     - Filter 14: Old TV Filter
 
- 3. Nariman | ID: 20250697 | S13:S14
+ 3. Nariman | ID: 20250697 | S11:S12
     - Filter 03: Invert Image
     - Filter 07: Darken and Lighten Image
     - Filter 11: Crop Images
@@ -27,11 +27,13 @@
     - Filter 08: Resizing Images
     - Filter 12: Blur Images
     - Filter 16: Infrared Filter
-    - Filter 17: Skew Filter(Bonus)
-    - Filter 18: Oil painting Filter(Bonus)
     - Made the menu,load,undo,clear,save and exit fun
  ----------------------------------------------
-*/
+--Link of the video demo of the program : https://drive.google.com/file/d/13NvLnE7VjWaoYJJ_xcKPeVwILT0gUonM/view?usp=drive_link
+
+--Link to the shared document : https://docs.google.com/document/d/1aL8plMXU9A0SrNkQnYs6901Oczuw4Qa1XX8lfcl-NT8/edit?usp=sharing
+
+ */
 #include <iostream>
 #include <cmath>
 #include "Image_Class.h"
